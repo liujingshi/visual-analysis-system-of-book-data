@@ -63,12 +63,18 @@ class LoginHandler(BaseHandler):
         else:
             self.set_status(500)
             self.error("登录失败")
-        
+
+class SpiderHandler(BaseHandler):
+    def post(self):
+        keyword = self.getParam("keyword")
+        results = db.spider(keyword)
+        self.success("", results)
 
 def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/login", LoginHandler),
+        (r"/spider", SpiderHandler),
     ])
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 from urllib.parse import urlencode
 from requests import session as sess
 from .base_class import BaseClass
+from .proxy import Proxy
 
 class Request(BaseClass):
 
@@ -10,13 +11,17 @@ class Request(BaseClass):
                 data={},
                 header={},
                 encoding="UTF-8",
-                session=None):
+                session=None,
+                proxy=False,
+                proxies=None):
         self.url = url  # 请求url
         self.method = method  # 请求方法
         self.data = data  # 请求数据
         self.header = header  # 请求头
         self.encoding = encoding  # 字符
         self.session = session  # 会话
+        self.proxy = proxy  # 使用代理
+        self.proxies = proxies  # 使用代理
 
         if self.session == None:
             self.session = sess()
@@ -34,12 +39,18 @@ class Request(BaseClass):
                 else:
                     param = "?" + param
             url_uri = self.url + param
-            return self.session.get(url_uri, headers=self.header)
+            if self.proxy:
+                return self.session.get(url_uri, headers=self.header, proxies=self.proxies if self.proxies != None else Proxy().get())
+            else:
+                return self.session.get(url_uri, headers=self.header)
         return None
 
     def _post(self):
         if self.url:
-            return self.session.post(self.url, data=self.data, headers=self.header)
+            if self.proxy:
+                return self.session.post(self.url, data=self.data, headers=self.header, proxies=self.proxies if self.proxies != None else Proxy().get())
+            else:
+                return self.session.post(self.url, data=self.data, headers=self.header)
         return None
 
     def setHeader(self, header = {}):

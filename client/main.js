@@ -43,15 +43,23 @@ define([
 
     if (url !== "") {
         const arr = url.split("/");
-        const r = router.find((t) => t.url === arr[1]);
-        if (r) {
-            r.view.init();
+        if (arr.length > 1) {
+            const r = router.find((t) => t.url === arr[1]);
+            if (r) {
+                r.view.init();
+            } else {
+                // 默认访问第一个路由
+                $("#app").empty();
+                router[0].view.init();
+            }
         } else {
             // 默认访问第一个路由
+            $("#app").empty();
             router[0].view.init();
         }
     } else {
         // 默认访问第一个路由
+        $("#app").empty();
         router[0].view.init();
     }
 

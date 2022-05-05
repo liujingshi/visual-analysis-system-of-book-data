@@ -1,3 +1,4 @@
+from .proxy import Proxy
 from .request import Request
 from .file_action import FileAction
 from .json_action import JsonAction
@@ -10,4 +11,5 @@ __all__ = [
     JsonAction,
     HTMLSelector,
     Response,
+    Proxy,
 ]

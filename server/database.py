@@ -1,6 +1,7 @@
 import pymongo
 from os.path import isfile
 from tools import FileAction, JsonAction
+from spider import search, bookinfo5
 
 database_name = "vasofbd"
 database_sheet_prefix = "vasofbd_"
@@ -82,3 +83,15 @@ class Database:
         return self.user.find_one({
             "username": username,
         })
+
+    @get_database_sheet
+    def spider(self, keyword):
+        bids = search(keyword)
+        results = []
+        for bid in bids:
+            result = getSheetInsert("book")
+            result = bookinfo5(bid, result)
+            if result:
+                dbResult = self.book.insert_one(result)
+                results.append(dbResult)
+        return results
