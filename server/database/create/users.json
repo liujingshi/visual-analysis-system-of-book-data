@@ -1,0 +1,13 @@
+[
+    {
+        "username": "user001",
+        "password": "12345678",
+        "name": "一号用户",
+        "permission": "administrator"
+    }, {
+        "username": "user002",
+        "password": "12345678",
+        "name": "二号用户",
+        "permission": "general"
+    }
+]

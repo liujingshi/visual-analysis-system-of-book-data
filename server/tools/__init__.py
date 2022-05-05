@@ -3,7 +3,6 @@ from .file_action import FileAction
 from .json_action import JsonAction
 from .html_selector import HTMLSelector
 from .response import Response
-from .auth import auth
 
 __all__ = [
     Request,

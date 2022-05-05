@@ -1,10 +1,22 @@
-from tools import Response, auth
+from tools import Response
 import tornado.ioloop
 import tornado.web
-from datetime import datetime
-import jwt
+from database import Database
 
-secret = "hhLgDUloTO2hKpawAGathnZEwNDbDEAOrNZQLj1DAzk="
+db = Database()
+
+def auth(method):
+
+    def wrapper(self, *args, **kwargs):
+        username = self.request.headers.get("Authorization", None)
+        if username:
+            self.user = db.getUser(username)
+            method(self, *args, **kwargs)
+        else:
+            self.set_status(401)
+            self.error("身份验证失败", {})
+
+    return wrapper
 
 class BaseHandler(tornado.web.RequestHandler):
     def set_default_headers(self):
@@ -13,28 +25,45 @@ class BaseHandler(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Headers", "*")
         self.set_header('Access-Control-Allow-Methods', '*')
 
-    def success(self, msg, data, token=None):
+    def options(self):
+        self.finish({})
+
+    def success(self, msg, data={}, token=None):
         res = Response.success(msg, data, token)
         self.write(res)
 
-    def error(self, msg, data):
+    def error(self, msg, data={}):
         res = Response.error(msg, data)
         self.write(res)
+
+    def getParam(self, key):
+        if key in self.request.arguments.keys():
+            if len(self.request.arguments[key]) > 1:
+                result = []
+                for item in self.request.arguments[key]:
+                    result.append(str(item, encoding="UTF-8"))
+                return result
+            if len(self.request.arguments[key]) == 1:
+                return str(self.request.arguments[key][0], encoding="UTF-8")
+        return None
+
 
 class MainHandler(BaseHandler):
     @auth
     def get(self):
-        self.write("Hello, world")
+        self.success("成功")
 
 class LoginHandler(BaseHandler):
     def post(self):
-        payload = {
-            "id": "8AD9B8B2-AA0D-4D77-935A-A49CB9036030",
-            "username": "username",
-            "exp": datetime.utcnow(),
-        }
-        token = jwt.encode(payload, secret, algorithm='HS256')
-        self.success("登录成功", {}, str(token, encoding='utf-8'))
+        username = self.getParam("username")
+        password = self.getParam("password")
+        user = db.verifyUser(username, password)
+        if user:
+            self.success("登录成功", {}, user["username"])
+        else:
+            self.set_status(500)
+            self.error("登录失败")
+        
 
 def make_app():
     return tornado.web.Application([
@@ -43,6 +72,7 @@ def make_app():
     ])
 
 if __name__ == "__main__":
+    print("Server Start: ", "http://localhost:8888/")
     app = make_app()
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()

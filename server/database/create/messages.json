@@ -1,0 +1,10 @@
+[
+    {
+        "from_user": "user002",
+        "to_user": "user001",
+        "message": "管理员您好，我想申请管理员权限，望通过",
+        "datetime": 0,
+        "is_read": false,
+        "read_datetime": null
+    }
+]

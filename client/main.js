@@ -22,7 +22,7 @@ define([
     home,
     admin
 ) {
-    util.ajax.setUp();
+    util.setup.setUp();
 
     const router = [
         {

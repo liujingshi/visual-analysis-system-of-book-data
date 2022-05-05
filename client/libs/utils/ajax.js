@@ -239,18 +239,19 @@
                     switch (xhr.status) {
                         // Unauthorized 用户验证失败
                         case 401:
-                            // toastr.popError('', result.msg);
+                            toastr.error(result.msg);
                             jwt.clean();
-                            // window.location.href = '/client';
+                            window.location.hash = '/';
+                            window.location.reload();
                             break;
                         // bad request 服务器阻绝满足请求,用于验证性错误
                         case 400:
-                            // toastr.popWar("", result.msg);
+                            toastr.warning();(result.msg);
                             break;
                         // InternalServerError 系统异常
                         case 500:
                             // TODO 开发阶段对报错进行返回 正式上线关闭
-                            // toastr.popError("", result.msg);
+                            toastr.error(result.msg);
                             break;
                         default:
                             break;

@@ -11,9 +11,11 @@ define(["text!./login.html", "util", "css!./login.css"], function(html, util) {
                 username: username,
                 password: password,
             }, (result) => {
-                console.log(result);
+                if (result.success) {
+                    window.location.hash = "/home";
+                    window.location.reload();
+                }
             });
-            util.ajax.get("http://localhost:8888/")
             return false;
         });
     }
