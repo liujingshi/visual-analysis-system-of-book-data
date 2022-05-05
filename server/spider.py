@@ -55,6 +55,19 @@ def bookinfo(id):
         levelHTML = html.get("#messbox_info_comm_num .star")
         level = int(levelHTML["style"].replace("\n", "").replace("\r", "").replace(" ", "").replace("width", "").replace(":", "").replace("%", "")) # 星级
         print("星级:", level)
+        popularityHTML = html.get("#collect_left")
+        collect = popularityHTML.text.replace("\n", "").replace("\r", "").replace(" ", "")
+        popularity = collect.replace("(", "").replace(")", "").replace("人气", "").replace("收藏商品", "")
+        if popularity != "":
+            popularity = int(popularity) # 人气
+            print("人气:", popularity)
+        # commentsHTML = html.getAll("#comment_list")
+        # print(commentsHTML)
+        commentCountHTML = html.get("#comm_num_down")
+        commentCount = int(commentCountHTML.text.replace("\n", "").replace("\r", "").replace(" ", "")) # 评论数
+        print("评论数:", commentCount)
+        # descHTML = html.get("#content")
+        # print(descHTML)
 
 ids = search("果壳中的宇宙")
 bookinfo(ids[0])

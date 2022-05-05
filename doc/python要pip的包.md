@@ -5,5 +5,6 @@
 pip install requests
 pip install beautifulsoup4
 pip install tornado
+pip install pyjwt
 pip install pymongo
 ```
