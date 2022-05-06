@@ -25,7 +25,7 @@ define(["text!./base.html", "util", "css!./base.css"], function (html, util) {
         if (blockUI && !blockUI.isBlocked()) {
             blockUI.block();
         }
-        util.ajax.post("http://localhost:8888/spider", {
+        util.ajax.post("http://localhost:8888/base", {
             keyword: keyword,
         }, (result) => {
             if (result.success) {
@@ -45,6 +45,7 @@ define(["text!./base.html", "util", "css!./base.css"], function (html, util) {
                 getData($('#ikeyword').val());
             }
         });
+        getData("");
     }
 
     return {

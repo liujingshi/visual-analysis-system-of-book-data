@@ -67,6 +67,13 @@ class Database:
     def __init__(self):
         self.myclient = pymongo.MongoClient(database_url)
         self.mydb = self.myclient[database_name]
+
+    def find(self, sheet, where):
+        result = []
+        for item in sheet.find(where):
+            result.append(item)
+        return result
+    
     
     @get_database_sheet
     def verifyUser(self, username, password):
@@ -82,6 +89,12 @@ class Database:
     def getUser(self, username):
         return self.user.find_one({
             "username": username,
+        })
+
+    @get_database_sheet
+    def getBooks(self, keyword=""):
+        return self.find(self.book, {
+            "name": {'$regex': keyword},
         })
 
     @get_database_sheet

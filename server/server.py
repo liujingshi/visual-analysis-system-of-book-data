@@ -64,6 +64,13 @@ class LoginHandler(BaseHandler):
             self.set_status(500)
             self.error("登录失败")
 
+class BaseHandler(BaseHandler):
+    @auth
+    def get(self):
+        keyword = self.getParam("keyword") or ""
+        results = db.getBooks(keyword)
+        self.success("", results)
+
 class SpiderHandler(BaseHandler):
     def post(self):
         keyword = self.getParam("keyword")
@@ -75,6 +82,7 @@ def make_app():
         (r"/", MainHandler),
         (r"/login", LoginHandler),
         (r"/spider", SpiderHandler),
+        (r"/base", BaseHandler),
     ])
 
 if __name__ == "__main__":
