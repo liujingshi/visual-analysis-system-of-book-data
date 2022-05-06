@@ -172,6 +172,7 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
                         x.push(item.name);
                         y.push(item.num);
                     });
+                    y[0] += 1;
                     render(x, y);
                 }
             }
