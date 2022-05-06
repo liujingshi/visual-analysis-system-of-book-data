@@ -2,6 +2,8 @@ import pymongo
 from os.path import isfile
 from tools import FileAction, JsonAction
 from spider import search, bookinfo5
+from bson import json_util
+import time
 
 database_name = "vasofbd"
 database_sheet_prefix = "vasofbd_"
@@ -71,7 +73,7 @@ class Database:
     def find(self, sheet, where):
         result = []
         for item in sheet.find(where):
-            result.append(item)
+            result.append(JsonAction(json_util.dumps(item)).toObj())
         return result
     
     
@@ -96,6 +98,34 @@ class Database:
         return self.find(self.book, {
             "name": {'$regex': keyword},
         })
+
+    @get_database_sheet
+    def getPresses(self):
+        return self.find(self.press, {})
+
+    @get_database_sheet
+    def getTags(self):
+        return self.find(self.tag, {})
+
+    @get_database_sheet
+    def getBookByPress(self, press):
+        return self.find(self.book, {
+            "press": press,
+        })
+
+    @get_database_sheet
+    def getBookByTag(self, tag):
+        return self.find(self.book, {
+            "tags": tag,
+        })
+
+    @get_database_sheet
+    def insertMsg(self, username, text):
+        msg = getSheetInsert("msg")
+        msg["from_user"] = username
+        msg["message"] = text
+        msg["datetime"] = time.localtime()
+        return self.msg.insert_one(msg)
 
     @get_database_sheet
     def spider(self, keyword):

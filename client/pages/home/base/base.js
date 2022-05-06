@@ -1,16 +1,19 @@
 define(["text!./base.html", "util", "css!./base.css"], function (html, util) {
 
     let blockUI = null;
+    let dt = null;
 
     const render = (results) => {
+        dt.destroy();
         $("#ibody").empty();
         results.forEach(result => {
-            $("#ibody").appned(`
+            const autuor = result.authors.join(",");
+            $("#ibody").append(`
             <tr>
                 <td>${result.name}</td>
                 <td>${result.category}</td>
                 <td>${result.price}</td>
-                <td>${result.authors.join(",")}</td>
+                <td>${autuor}</td>
                 <td>${result.press}</td>
                 <td>${result.press_datetime}</td>
                 <td>${result.popularity}</td>
@@ -18,14 +21,14 @@ define(["text!./base.html", "util", "css!./base.css"], function (html, util) {
             </tr>
             `);
         });
-        $("#itable").DataTable();
+        dt = $("#itable").DataTable();
     }
 
     const getData = (keyword) => {
         if (blockUI && !blockUI.isBlocked()) {
             blockUI.block();
         }
-        util.ajax.post("http://localhost:8888/base", {
+        util.ajax.get("http://localhost:8888/base", {
             keyword: keyword,
         }, (result) => {
             if (result.success) {
@@ -40,6 +43,7 @@ define(["text!./base.html", "util", "css!./base.css"], function (html, util) {
     const init = ($parent) => {
         $parent.append(html);
         blockUI = new KTBlockUI($("#itable")[0]);
+        dt = $("#itable").DataTable();;
         $('#ikeyword').on('keypress', function (e) {
             if (e.keyCode === 13) {
                 getData($('#ikeyword').val());

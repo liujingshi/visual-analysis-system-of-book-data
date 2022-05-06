@@ -71,6 +71,183 @@ class BaseHandler(BaseHandler):
         results = db.getBooks(keyword)
         self.success("", results)
 
+class PressHandler(BaseHandler):
+    @auth
+    def get(self):
+        type = self.getParam("type")
+        presses = db.getPresses()
+        info = []
+        price = []
+        score = []
+        bp = []
+        for press in presses:
+            books = db.getBookByPress(press["name"])
+            info.append({
+                "name": press["name"],
+                "num": len(books)
+            })
+            p = 0
+            pc = 0
+            s = 0
+            sc = 0
+            b = 0
+            for book in books:
+                try:
+                    p += float(book["price"])
+                    pc += 1
+                except:
+                    pass
+                try:
+                    s += float(book["level"])
+                    sc += 1
+                except:
+                    pass
+                try:
+                    if float(book["price"]) >= 50:
+                        b += 1
+                except:
+                    pass
+            if pc > 0:
+                price.append({
+                    "name": press["name"],
+                    "num": p / pc,
+                })
+            if sc > 0:
+                score.append({
+                    "name": press["name"],
+                    "num": s / sc,
+                })
+            bp.append({
+                "name": press["name"],
+                "num": b,
+            })
+        if type == "info":
+            self.success("", info)
+        elif type == "price":
+            self.success("", price)
+        elif type == "score":
+            self.success("", score)
+        elif type == "big_price":
+            self.success("", bp)
+        else:
+            self.error("无效参数")
+
+class LevelHandler(BaseHandler):
+    @auth
+    def get(self):
+        type = self.getParam("type")
+        books = db.getBooks()
+        tags = db.getTags()
+        bp = []
+        price = [{
+            "name": "一星",
+            "num": 0,
+        },{
+            "name": "二星",
+            "num": 0,
+        },{
+            "name": "三星",
+            "num": 0,
+        },{
+            "name": "四星",
+            "num": 0,
+        },{
+            "name": "五星",
+            "num": 0,
+        }]
+
+        for tag in tags:
+            t = tag["name"]
+            bp.append({
+                "name": t,
+                "num": len(db.getBookByTag(t))
+            })
+
+        for book in books:
+            try:
+                ppp = float(book["level"])
+                if 0 < ppp <= 20:
+                    price[0]["num"] += 1
+                elif 20 < ppp <= 40:
+                    price[1]["num"] += 1
+                elif 40 < ppp <= 60:
+                    price[2]["num"] += 1
+                elif 60 < ppp <= 80:
+                    price[3]["num"] += 1
+                elif 80 < ppp:
+                    price[4]["num"] += 1
+            except:
+                pass
+        if type == "cloud":
+            self.success("", bp)
+        elif type == "level":
+            self.success("", price)
+        else:
+            self.error("无效参数")
+
+class PriceHandler(BaseHandler):
+    @auth
+    def get(self):
+        type = self.getParam("type")
+        books = db.getBooks()
+        bp = []
+        price = [{
+            "name": "0~20",
+            "num": 0,
+        },{
+            "name": "20~50",
+            "num": 0,
+        },{
+            "name": "50~100",
+            "num": 0,
+        },{
+            "name": "100~200",
+            "num": 0,
+        },{
+            "name": "200~500",
+            "num": 0,
+        },{
+            "name": "500+",
+            "num": 0,
+        }]
+
+        for book in books:
+            try:
+                ppp = float(book["price"])
+                if ppp >= 50:
+                    bp.append(book)
+                if 0 < ppp <= 20:
+                    price[0]["num"] += 1
+                elif 20 < ppp <= 50:
+                    price[1]["num"] += 1
+                elif 50 < ppp <= 100:
+                    price[2]["num"] += 1
+                elif 100 < ppp <= 200:
+                    price[3]["num"] += 1
+                elif 200 < ppp <= 500:
+                    price[4]["num"] += 1
+                elif 500 < ppp:
+                    price[5]["num"] += 1
+            except:
+                pass
+        if type == "bp":
+            self.success("", bp)
+        elif type == "price":
+            self.success("", price)
+        else:
+            self.error("无效参数")
+
+class MsgHandler(BaseHandler):
+    @auth
+    def post(self):
+        text = self.getParam("text") or ""
+        msg = db.insertMsg(self.user["username"], text)
+        if msg:
+            self.success("留言成功")
+        else:
+            self.set_status("500")
+            self.error("留言失败")
+
 class SpiderHandler(BaseHandler):
     def post(self):
         keyword = self.getParam("keyword")
@@ -83,6 +260,10 @@ def make_app():
         (r"/login", LoginHandler),
         (r"/spider", SpiderHandler),
         (r"/base", BaseHandler),
+        (r"/press", PressHandler),
+        (r"/price", PriceHandler),
+        (r"/msg", MsgHandler),
+        (r"/level", LevelHandler),
     ])
 
 if __name__ == "__main__":
