@@ -86,12 +86,14 @@ class Database:
 
     @get_database_sheet
     def spider(self, keyword):
-        bids = search(keyword)
-        results = []
-        for bid in bids:
-            result = getSheetInsert("book")
-            result = bookinfo5(bid, result)
-            if result:
-                dbResult = self.book.insert_one(result)
-                results.append(dbResult)
+        for key in ["时间简史", "人生海海", "蛤蟆先生去看心理医生", "生死疲劳", "活着", "被讨厌的勇气", "房思琪的初恋乐园", "三体", "你当像鸟飞往你的山", 
+        "青铜葵花", "大话中国艺术史", "语言表达第一课", "杀死一只知更鸟", "月光落在左手上", "百年孤独", "法治的细节"]:
+            bids = search(key)
+            results = []
+            for bid in bids:
+                result = getSheetInsert("book")
+                result = bookinfo5(bid, result)
+                if result:
+                    dbResult = self.book.insert_one(result)
+                    results.append(dbResult)
         return results
