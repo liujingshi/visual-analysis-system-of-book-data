@@ -29,3 +29,12 @@
     height: calc(100% - 70px);
     overflow-y: auto;
 }
+
+.btn.two-word::first-letter {
+    letter-spacing: 0.5em;
+}
+
+.btn.two-word > * {
+    margin-right: -0.5em;
+    letter-spacing: 0.5em;
+}

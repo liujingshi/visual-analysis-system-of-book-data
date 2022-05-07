@@ -156,7 +156,7 @@
 
     var put = function (url, data, successfn, errorfn) {
         $.ajax({
-            type: "POST",
+            type: "PUT",
             data: data,
             url: url,
             headers:
@@ -175,7 +175,7 @@
 
     var del = function (url, data, successfn, errorfn) {
         $.ajax({
-            type: "POST",
+            type: "Delete",
             data: data,
             url: url,
             headers:

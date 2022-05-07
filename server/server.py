@@ -1,7 +1,7 @@
 from tools import Response
 import tornado.ioloop
 import tornado.web
-from database import Database
+from database import Database, getSheetInsert
 
 db = Database()
 
@@ -53,16 +53,81 @@ class MainHandler(BaseHandler):
     def get(self):
         self.success("成功")
 
+class BookHandler(BaseHandler):
+    @auth
+    def post(self):
+        book = getSheetInsert("book")
+        book["name"] = self.getParam("name")
+        book["category"] = self.getParam("category")
+        book["authors"] = self.getParam("authors").split(",")
+        book["price"] = self.getParam("price")
+        book["author_desc"] = self.getParam("author_desc")
+        book["press"] = self.getParam("press")
+        book["press_datetime"] = self.getParam("press_datetime")
+        book["level"] = self.getParam("level")
+        book["popularity"] = self.getParam("popularity")
+        book["comment_count"] = self.getParam("comment_count")
+        book["desc"] = self.getParam("desc")
+        db.insertPress(book["press"])
+        db.insertCate(book["category"])
+        db.insertBook(book)
+        self.success("成功")
+
+    @auth
+    def put(self):
+        id = self.getParam("id")
+        oldbook = db.getBookById(id)
+        book = db.getBookById(id)
+        if book:
+            book["name"] = self.getParam("name")
+            book["category"] = self.getParam("category")
+            book["authors"] = self.getParam("authors").split(",")
+            book["price"] = self.getParam("price")
+            book["author_desc"] = self.getParam("author_desc")
+            book["press"] = self.getParam("press")
+            book["press_datetime"] = self.getParam("press_datetime")
+            book["level"] = self.getParam("level")
+            book["popularity"] = self.getParam("popularity")
+            book["comment_count"] = self.getParam("comment_count")
+            book["desc"] = self.getParam("desc")
+            db.updateBook(oldbook, book)
+            self.success("修改成功")
+        else:
+            self.set_status(500)
+            self.error("图书信息不存在")
+
+    @auth
+    def delete(self):
+        id = self.getParam("id")
+        db.deleteBook(id)
+        self.success("删除成功")
+
+    @auth
+    def get(self):
+        id = self.getParam("id")
+        bookinfo = db.getOneBook(id)
+        if bookinfo:
+            self.success("", bookinfo)
+        else:
+            self.set_status(500)
+            self.error("图书信息不存在")
+
 class LoginHandler(BaseHandler):
     def post(self):
         username = self.getParam("username")
         password = self.getParam("password")
         user = db.verifyUser(username, password)
         if user:
-            self.success("登录成功", {}, user["username"])
+            self.success("登录成功", user, user["username"])
         else:
             self.set_status(500)
             self.error("登录失败")
+
+class UserHandler(BaseHandler):
+    @auth
+    def get(self):
+        users = db.getUsers()
+        self.success("", users)
 
 class BaseHandler(BaseHandler):
     @auth
@@ -264,6 +329,8 @@ def make_app():
         (r"/price", PriceHandler),
         (r"/msg", MsgHandler),
         (r"/level", LevelHandler),
+        (r"/user", UserHandler),
+        (r"/book", BookHandler),
     ])
 
 if __name__ == "__main__":

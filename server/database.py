@@ -70,16 +70,16 @@ class Database:
         self.myclient = pymongo.MongoClient(database_url)
         self.mydb = self.myclient[database_name]
 
-    def find(self, sheet, where):
+    def find(self, sheet, where={}):
         result = []
         for item in sheet.find(where):
             result.append(JsonAction(json_util.dumps(item)).toObj())
         return result
-    
+
     
     @get_database_sheet
     def verifyUser(self, username, password):
-        users = self.user.find({
+        users = self.find(self.user, {
             "username": username,
             "password": password,
         })
@@ -92,6 +92,10 @@ class Database:
         return self.user.find_one({
             "username": username,
         })
+
+    @get_database_sheet
+    def getUsers(self):
+        return self.find(self.user)
 
     @get_database_sheet
     def getBooks(self, keyword=""):
@@ -162,3 +166,34 @@ class Database:
     @get_database_sheet
     def insertBook(self, book):
         self.book.insert_one(book)
+
+    @get_database_sheet
+    def updateBook(self, oldbook, book):
+        self.book.update_one(oldbook, book)
+
+    @get_database_sheet
+    def deleteBook(self, id):
+        self.book.delete_one({
+            "_id": id
+        })
+
+    @get_database_sheet
+    def getOneBook(self, book):
+        rst = self.find(self.book, {
+            "_id": book
+        })
+        print(book)
+        print(rst)
+        for t in rst:
+            return t
+        return None
+
+    @get_database_sheet
+    def getBookById(self, book):
+        rst = self.book.find({
+            "_id": book
+        })
+        for r in rst:
+            return r
+        return None
+        

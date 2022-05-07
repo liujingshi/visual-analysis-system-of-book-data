@@ -1,9 +1,9 @@
-define(["text!./login.html", "util", "css!./login.css"], function(html, util) {
-    
+define(["text!./login.html", "util", "css!./login.css"], function (html, util) {
+
     const init = () => {
         $("#app").empty();
         $("#app").append(html);
-        
+
         $("#kt_sign_in_form").submit(() => {
             const username = kt_sign_in_form.username.value;
             const password = kt_sign_in_form.password.value;
@@ -12,7 +12,11 @@ define(["text!./login.html", "util", "css!./login.css"], function(html, util) {
                 password: password,
             }, (result) => {
                 if (result.success) {
-                    window.location.hash = "/home";
+                    if (result.data.permission == "administrator") {
+                        window.location.hash = "/admin";
+                    } else {
+                        window.location.hash = "/home";
+                    }
                     window.location.reload();
                 }
             });

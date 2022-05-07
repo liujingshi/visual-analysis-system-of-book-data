@@ -6,8 +6,44 @@
                     <h3 class="fw-bolder text-gray-900 m-0">用户管理</h3>
                 </div>
                 <div class="card-body pt-2">
-                    
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <a href="javascript:;" class="btn btn-light-primary two-word" data-bs-toggle="modal" data-bs-target="#kt_modal_1">新增</a>
+                        <a href="javascript:;" class="btn btn-light-success two-word ms-2" data-bs-toggle="modal" data-bs-target="#kt_modal_1">修改</a>
+                        <a href="javascript:;" class="btn btn-light-danger two-word ms-2" id="delete">删除</a>
+                    </div>
+                    <table id="itable" class="table table-row-bordered gy-5">
+                        <thead>
+                            <tr class="fw-bold fs-6 text-muted">
+                                <th>姓名</th>
+                                <th>用户名</th>
+                                <th>权限</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ibody">
+                            
+                        </tbody>
+                    </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="kt_modal_1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">用户信息</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">提交</button>
             </div>
         </div>
     </div>

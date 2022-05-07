@@ -3,12 +3,14 @@ define([
     "./get/get",
     "./import/import",
     "./user/user",
+    "./base/base",
     "css!./admin.css"
 ], function(
     html,
     get,
     imp,
-    user
+    user,
+    base
 ) {
 
     const dataRouter = [
@@ -21,6 +23,11 @@ define([
             url: "import",
             view: imp,
             name: "数据导入",
+        },
+        {
+            url: "manage",
+            view: base,
+            name: "图书管理",
         },
     ];
 

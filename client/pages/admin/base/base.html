@@ -1,0 +1,124 @@
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="card h-md-100">
+                <div class="card-header align-items-center border-0">
+                    <h3 class="fw-bolder text-gray-900 m-0">图书管理</h3>
+                </div>
+                <div class="card-body pt-2">
+                    <div class="d-flex align-items-center position-relative my-1">
+                        <a href="javascript:;" class="btn btn-light-primary two-word" id="add" data-bs-toggle="modal" data-bs-target="#kt_modal_1">新增</a>
+                        <a href="javascript:;" class="btn btn-light-success two-word ms-2" id="edit">修改</a>
+                        <a href="javascript:;" class="btn btn-light-danger two-word ms-2" id="delete">删除</a>
+                        <input type="text" id="ikeyword" class="form-control form-control-solid w-250px" style="margin-left: auto;" placeholder="模糊搜索"/>
+                    </div>
+                    <table id="itable" class="table table-row-bordered gy-5">
+                        <thead>
+                            <tr class="fw-bold fs-6 text-muted">
+                                <th style="display: none;">ID</th>
+                                <th>书名</th>
+                                <th>分类</th>
+                                <th>价格</th>
+                                <th>作者</th>
+                                <th>出版社</th>
+                                <th>出版日期</th>
+                                <th>人气</th>
+                                <th>评论数</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ibody">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="kt_modal_1">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 800px !important;">
+        <div class="modal-content" id="bui1">
+            <div class="modal-header">
+                <h5 class="modal-title">图书信息</h5>
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+            </div>
+            <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 17rem);">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-10">
+                            <label class="required form-label">书名</label>
+                            <input type="text" name="name" class="form-control form-control-solid" placeholder="请输入书名"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-10">
+                            <label class="required form-label">分类</label>
+                            <input type="text" name="category" class="form-control form-control-solid" placeholder="请输入分类"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-10">
+                            <label class="required form-label">作者</label>
+                            <input type="text" name="authors" class="form-control form-control-solid" placeholder="请输入作者"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-10">
+                            <label class="required form-label">价格</label>
+                            <input type="text" name="price" class="form-control form-control-solid" placeholder="请输入价格"/>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="mb-10">
+                            <label class="required form-label">作者简介</label>
+                            <textarea name="author_desc" placeholder="请输入作者简介" class="form-control form-control form-control-solid" data-kt-autosize="true"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-10">
+                            <label class="required form-label">出版社</label>
+                            <input type="text" name="press" class="form-control form-control-solid" placeholder="请输入出版社"/>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-10">
+                            <label class="required form-label">出版日期</label>
+                            <input type="text" name="press_datetime" class="form-control form-control-solid" placeholder="请输入出版日期"/>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-10">
+                            <label class="required form-label">星级</label>
+                            <input type="text" name="level" class="form-control form-control-solid" placeholder="请输入星级"/>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-10">
+                            <label class="required form-label">人气</label>
+                            <input type="text" name="popularity" class="form-control form-control-solid" placeholder="请输入人气"/>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-10">
+                            <label class="required form-label">评论数</label>
+                            <input type="text" name="comment_count" class="form-control form-control-solid" placeholder="请输入评论数"/>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="mb-10">
+                            <label class="required form-label">内容简介</label>
+                            <textarea name="desc" placeholder="请输入内容简介" class="form-control form-control form-control-solid" data-kt-autosize="true"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary" id="submit">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
