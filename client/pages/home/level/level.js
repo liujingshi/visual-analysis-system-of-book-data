@@ -1,5 +1,6 @@
 define(["text!./level.html", "util", "css!./level.css"], function (html, util) {
     let blockUI1 = null;
+    let blockUI2 = null;
 
     const render1 = (x, y) => {
         let element = document.getElementById('kt_apexcharts_1');
@@ -142,10 +143,53 @@ define(["text!./level.html", "util", "css!./level.css"], function (html, util) {
         });
     }
 
+    const render2 = () => {
+        var primaryColor = KTUtil.getCssVariableValue('--bs-primary');
+        var dangerColor = KTUtil.getCssVariableValue('--bs-danger');
+        var successColor = KTUtil.getCssVariableValue('--bs-success');
+        var warningColor = KTUtil.getCssVariableValue('--bs-warning');
+        var infoColor = KTUtil.getCssVariableValue('--bs-info');
+        WordCloud(document.getElementById('my_canvas'), { 
+            list: [
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+                ['foo', 6], 
+                ['bar', 12],
+            ],
+            fontFamily: '"Poppins", "Helvetica", "sans-serif"',
+            color: () => {
+                const randomsort = (a, b) => {
+                    return Math.random()>.5 ? -1 : 1;
+                }
+                const colors = [primaryColor, dangerColor, successColor, warningColor, infoColor];
+                return colors.sort(randomsort)[0];
+            },
+            weightFactor: 8,
+        });
+    }
+
     const init = ($parent) => {
         $parent.append(html);
         blockUI1 = new KTBlockUI($("#kt_apexcharts_1")[0]);
+        blockUI2 = new KTBlockUI($("#my_canvas")[0]);
         getData1();
+        render2();
     }
 
     return {

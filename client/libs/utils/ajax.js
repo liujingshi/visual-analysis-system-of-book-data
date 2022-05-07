@@ -241,8 +241,8 @@
                         case 401:
                             toastr.error(result.msg);
                             jwt.clean();
-                            window.location.hash = '/';
-                            window.location.reload();
+                            // window.location.hash = '/';
+                            // window.location.reload();
                             break;
                         // bad request 服务器阻绝满足请求,用于验证性错误
                         case 400:
