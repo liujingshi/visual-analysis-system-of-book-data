@@ -1,5 +1,8 @@
-from tools import Request, HTMLSelector, JsonAction, Proxy
+from tools import Request, HTMLSelector, JsonAction, Proxy, FileAction
 from copy import deepcopy
+from time import sleep
+import re
+from database import Database, getSheetInsert
 
 proxy=True
 def proxies():
@@ -24,7 +27,7 @@ def search(keyword):
                 result.append(res["id"].replace("p", ""))
     return result
 
-def bookdesc(id, pro):
+def bookdesc(id):
     url = "http://product.dangdang.com/index.php"
     method = "GET"
     param = {
@@ -35,19 +38,18 @@ def bookdesc(id, pro):
         "shopId": "0",
         "categoryPath": "01.41.26.03.00.00",
     }
-    req = Request(url, method, param, encoding="GB2312", proxy=proxy, proxies=pro)
+    req = Request(url, method, param, encoding="GB2312")
     res = req.start()
     return res
 
 def bookinfo(id, rst):
     try:
-        pro = proxies()
         result = deepcopy(rst)
         url = "http://product.dangdang.com/{0}.html".format(id)
         method = "GET"
-        req = Request(url, method, encoding="GB2312", proxy=proxy, proxies=pro)
+        req = Request(url, method, encoding="GB2312")
         res = req.start()
-        descres = bookdesc(id, pro)
+        descres = bookdesc(id)
         succ = True
         if res:
             try:
@@ -60,6 +62,21 @@ def bookinfo(id, rst):
                     pass
                 nameHTML = html.get("#product_info .name_info h1")
                 name = nameHTML["title"] # 书名
+                # （） () (） （) [] 【】 【] [】 split " " > 20 //
+                name = re.sub(r'（(.)*）(.)*', '', name)
+                name = re.sub(r'\((.)*）(.)*', '', name)
+                name = re.sub(r'（(.)*\)(.)*', '', name)
+                name = re.sub(r'\((.)*\)(.)*', '', name)
+                name = re.sub(r'\[(.)*\](.)*', '', name)
+                name = re.sub(r'【(.)*\](.)*', '', name)
+                name = re.sub(r'【(.)*】(.)*', '', name)
+                name = re.sub(r'\[(.)*】(.)*', '', name)
+                if len(name) > 30:
+                    name = name.split("\t")[0]
+                if len(name) > 30:
+                    name = name.split(" ")[0]
+                if len(name) > 30:
+                    return None
                 result["name"] = name
                 categoryHTML = html.getAll("#detail-category-path .lie a")
                 if len(categoryHTML) > 0:
@@ -111,6 +128,28 @@ def bookinfo(id, rst):
         pass
     return None
 
+def booklist():
+    results = []
+    for i in range(1, 26):
+        sleep(20)
+        url = "http://bang.dangdang.com/books/fivestars/01.00.00.00.00.00-recent30-0-0-1-{0}".format(i)
+        method = "GET"
+        req = Request(url, method, encoding="GB2312")
+        res = req.start()
+        print(i)
+        if res:
+            html = HTMLSelector(res, encoding="GB2312")
+            items = html.findAll(".bang_list.clearfix.bang_list_mode > li")
+            for item in items:
+                nameHTML = item.get(".name a")
+                href = nameHTML["href"]
+                title = nameHTML["title"]
+                results.append({
+                    "title": title,
+                    "href": href
+                })
+    FileAction("./list.json").write(JsonAction(results).toStr())
+
 def bookinfo5(id, rst):
     count = 0
     while count < 5:
@@ -120,3 +159,23 @@ def bookinfo5(id, rst):
         else:
             count += 1
     return None
+
+# booklist()
+
+
+
+db = Database()
+bookinsertinfo = getSheetInsert("book")
+books = JsonAction(FileAction("./list.json").read()).toObj()
+i = 0
+for book in books:
+    sleep(20)
+    i += 1
+    print(i)
+    result = bookinfo(book["href"], bookinsertinfo)
+    if result:
+        if result["category"] and result["category"] != "":
+            db.insertCate(result["category"])
+        if result["press"] and result["press"] != "":
+            db.insertPress(result["press"])
+        db.insertBook(result)

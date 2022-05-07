@@ -258,7 +258,7 @@ def make_app():
     return tornado.web.Application([
         (r"/", MainHandler),
         (r"/login", LoginHandler),
-        (r"/spider", SpiderHandler),
+        # (r"/spider", SpiderHandler),
         (r"/base", BaseHandler),
         (r"/press", PressHandler),
         (r"/price", PriceHandler),
