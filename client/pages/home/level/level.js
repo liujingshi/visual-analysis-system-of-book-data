@@ -189,7 +189,7 @@ define(["text!./level.html", "util", "css!./level.css"], function (html, util) {
         blockUI1 = new KTBlockUI($("#kt_apexcharts_1")[0]);
         blockUI2 = new KTBlockUI($("#my_canvas")[0]);
         getData1();
-        render2();
+        // render2();
     }
 
     return {

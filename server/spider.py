@@ -165,17 +165,21 @@ def bookinfo5(id, rst):
 
 
 db = Database()
-bookinsertinfo = getSheetInsert("book")
-books = JsonAction(FileAction("./list.json").read()).toObj()
-i = 0
-for book in books:
-    sleep(20)
-    i += 1
-    print(i)
-    result = bookinfo(book["href"], bookinsertinfo)
-    if result:
-        if result["category"] and result["category"] != "":
-            db.insertCate(result["category"])
-        if result["press"] and result["press"] != "":
-            db.insertPress(result["press"])
-        db.insertBook(result)
+# bookinsertinfo = getSheetInsert("book")
+# books = JsonAction(FileAction("./list.json").read()).toObj()
+# i = 0
+# for book in books:
+#     sleep(20)
+#     i += 1
+#     print(i)
+#     result = bookinfo(book["href"], bookinsertinfo)
+#     if result:
+#         if result["category"] and result["category"] != "":
+#             db.insertCate(result["category"])
+#         if result["press"] and result["press"] != "":
+#             db.insertPress(result["press"])
+#         db.insertBook(result)
+
+db.mydb["vasofbd_books"].delete_many({
+    "name": ""
+})
