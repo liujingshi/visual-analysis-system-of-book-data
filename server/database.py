@@ -1,4 +1,5 @@
 import pymongo
+from bson.objectid import ObjectId
 from os.path import isfile
 from tools import FileAction, JsonAction
 # from spider import search, bookinfo5
@@ -169,29 +170,59 @@ class Database:
 
     @get_database_sheet
     def updateBook(self, oldbook, book):
-        self.book.update_one(oldbook, book)
+        self.book.update_one(oldbook, {"$set": book})
 
     @get_database_sheet
     def deleteBook(self, id):
         self.book.delete_one({
-            "_id": id
+            "_id": ObjectId(id)
         })
 
     @get_database_sheet
-    def getOneBook(self, book):
+    def getOneBook(self, id):
         rst = self.find(self.book, {
-            "_id": book
+            "_id": ObjectId(id)
         })
-        print(book)
-        print(rst)
         for t in rst:
             return t
         return None
 
     @get_database_sheet
-    def getBookById(self, book):
+    def getBookById(self, id):
         rst = self.book.find({
-            "_id": book
+            "_id": ObjectId(id)
+        })
+        for r in rst:
+            return r
+        return None
+
+    @get_database_sheet
+    def insertUser(self, user):
+        self.user.insert_one(user)
+
+    @get_database_sheet
+    def updateUser(self, olduser, user):
+        self.user.update_one(olduser, {"$set": user})
+
+    @get_database_sheet
+    def deleteUser(self, id):
+        self.user.delete_one({
+            "_id": ObjectId(id)
+        })
+
+    @get_database_sheet
+    def getOneUser(self, id):
+        rst = self.find(self.user, {
+            "_id": ObjectId(id)
+        })
+        for t in rst:
+            return t
+        return None
+
+    @get_database_sheet
+    def getUserById(self, id):
+        rst = self.user.find({
+            "_id": ObjectId(id)
         })
         for r in rst:
             return r

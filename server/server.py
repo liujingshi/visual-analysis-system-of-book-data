@@ -123,11 +123,53 @@ class LoginHandler(BaseHandler):
             self.set_status(500)
             self.error("登录失败")
 
+    @auth
+    def get(self):
+        id = self.getParam("id")
+        userinfo = db.getOneUser(id)
+        if userinfo:
+            self.success("", userinfo)
+        else:
+            self.set_status(500)
+            self.error("用户信息不存在")
+
 class UserHandler(BaseHandler):
     @auth
     def get(self):
         users = db.getUsers()
         self.success("", users)
+
+    @auth
+    def post(self):
+        user = getSheetInsert("user")
+        user["username"] = self.getParam("username")
+        user["password"] = self.getParam("password")
+        user["name"] = self.getParam("name")
+        user["permission"] = self.getParam("permission")
+        db.insertUser(user)
+        self.success("成功")
+
+    @auth
+    def put(self):
+        id = self.getParam("id")
+        olduser = db.getUserById(id)
+        user = db.getUserById(id)
+        if user:
+            user["username"] = self.getParam("username")
+            user["password"] = self.getParam("password")
+            user["name"] = self.getParam("name")
+            user["permission"] = self.getParam("permission")
+            db.updateUser(olduser, user)
+            self.success("修改成功")
+        else:
+            self.set_status(500)
+            self.error("用户信息不存在")
+
+    @auth
+    def delete(self):
+        id = self.getParam("id")
+        db.deleteUser(id)
+        self.success("删除成功")
 
 class BaseHandler(BaseHandler):
     @auth
