@@ -4,13 +4,15 @@ define([
     "./import/import",
     "./user/user",
     "./base/base",
+    "./message/message",
     "css!./admin.css"
 ], function(
     html,
     get,
     imp,
     user,
-    base
+    base,
+    message
 ) {
 
     const dataRouter = [
@@ -36,6 +38,11 @@ define([
             url: "user",
             view: user,
             name: "用户管理",
+        },
+        {
+            url: "message",
+            view: message,
+            name: "留言板",
         },
         {
             url: "home",

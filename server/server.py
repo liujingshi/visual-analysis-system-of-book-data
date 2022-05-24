@@ -346,6 +346,10 @@ class PriceHandler(BaseHandler):
 
 class MsgHandler(BaseHandler):
     @auth
+    def get(self):
+        self.success("留言成功", db.getMsg())
+
+    @auth
     def post(self):
         text = self.getParam("text") or ""
         msg = db.insertMsg(self.user["username"], text)

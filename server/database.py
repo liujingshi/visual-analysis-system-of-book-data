@@ -132,6 +132,10 @@ class Database:
         msg["datetime"] = time.localtime()
         return self.msg.insert_one(msg)
 
+    @get_database_sheet
+    def getMsg(self):
+        return self.find(self.msg)
+
     # @get_database_sheet
     # def spider(self, keyword):
     #     for key in ["时间简史", "人生海海", "蛤蟆先生去看心理医生", "生死疲劳", "活着", "被讨厌的勇气", "房思琪的初恋乐园", "三体", "你当像鸟飞往你的山", 
