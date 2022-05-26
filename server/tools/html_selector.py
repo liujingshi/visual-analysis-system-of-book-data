@@ -1,17 +1,17 @@
 from .base_class import BaseClass
 from bs4 import BeautifulSoup
 
-class HTMLSelector(BaseClass):
+class HTMLSelector(BaseClass): # HTML解析器
 
     def __init__(self,
                 html=None,
                 encoding="UTF-8"):
         self.html = html
         self.encoding = encoding
-        self.htmlObj = BeautifulSoup(self.html, "html.parser")
+        self.htmlObj = BeautifulSoup(self.html, "html.parser") # 解析HTML
         self.htmlObj.encode = self.encoding
 
-    def find(self, selector):
+    def find(self, selector): # 根据选择器查找数据
         rst = self.htmlObj.select_one(selector)
         if rst:
             result = HTMLSelector("<div></div>")
@@ -19,7 +19,7 @@ class HTMLSelector(BaseClass):
             return result
         return None
 
-    def findAll(self, selector):
+    def findAll(self, selector): # 根据选择器查找数据
         rsts = self.htmlObj.select(selector)
         result = []
         for rst in rsts:
@@ -28,8 +28,8 @@ class HTMLSelector(BaseClass):
             result.append(tmp)
         return result
 
-    def get(self, selector):
+    def get(self, selector): # 根据选择器查找数据
         return self.htmlObj.select_one(selector)
 
-    def getAll(self, selector):
+    def getAll(self, selector): # 根据选择器查找数据
         return self.htmlObj.select(selector)

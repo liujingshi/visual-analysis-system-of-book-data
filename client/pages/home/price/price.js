@@ -1,12 +1,12 @@
 define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
     
-    let blockUI = null;
-    let dt = null;
+    let blockUI = null;  // Loading对象
+    let dt = null;  // grid对象
 
-    const render = (results) => {
-        dt.destroy();
-        $("#ibody").empty();
-        results.forEach(result => {
+    const render = (results) => {  // 渲染方法
+        dt.destroy();  // 销毁grid
+        $("#ibody").empty(); // 清空tbody dom
+        results.forEach(result => {  // 遍历数据 渲染DOM
             const autuor = result.authors.join(",");
             $("#ibody").append(`
             <tr>
@@ -21,45 +21,45 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
             </tr>
             `);
         });
-        dt = $("#itable").DataTable();
+        dt = $("#itable").DataTable(); // 创建Datatable
     }
 
-    const getData = () => {
+    const getData = () => { // 获取数据
         if (blockUI && !blockUI.isBlocked()) {
-            blockUI.block();
+            blockUI.block();  // 开启Loading
         }
         util.ajax.get("http://localhost:8888/price", {
             type: "bp",
         }, (result) => {
             if (result.success) {
                 if (blockUI && blockUI.isBlocked()) {
-                    blockUI.release();
+                    blockUI.release();  // 关闭Loading
                 }
-                render(result.data);
+                render(result.data);  // 开始渲染
             }
         });
     }
 
-    let blockUI1 = null;
+    let blockUI1 = null;  // Loading对象
 
-    const render1 = (x, y) => {
-        let element = document.getElementById('kt_apexcharts_1');
-        let height = parseInt(KTUtil.css(element, 'height'));
-        let labelColor = KTUtil.getCssVariableValue('--bs-gray-500');
-        let borderColor = KTUtil.getCssVariableValue('--bs-gray-200');
-        let baseColor = KTUtil.getCssVariableValue('--bs-primary');
-        let secondaryColor = KTUtil.getCssVariableValue('--bs-gray-300');
+    const render1 = (x, y) => { // 渲染
+        let element = document.getElementById('kt_apexcharts_1'); // 获取目标元素
+        let height = parseInt(KTUtil.css(element, 'height')); // 获取目标元素高度
+        let labelColor = KTUtil.getCssVariableValue('--bs-gray-500'); // 获取颜色
+        let borderColor = KTUtil.getCssVariableValue('--bs-gray-200'); // 获取颜色
+        let baseColor = KTUtil.getCssVariableValue('--bs-primary'); // 获取颜色
+        let secondaryColor = KTUtil.getCssVariableValue('--bs-gray-300'); // 获取颜色
 
-        if (!element) {
+        if (!element) { // 如果元素不存在直接返回
             return;
         }
 
-        let options = {
-            series: [{
+        let options = { // chart配置
+            series: [{ // y轴数据
                 name: '数量',
                 data: y
             }],
-            chart: {
+            chart: { // Chart基本数据
                 fontFamily: 'inherit',
                 type: 'bar',
                 height: height,
@@ -67,7 +67,7 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
                     show: false
                 }
             },
-            plotOptions: {
+            plotOptions: { // 坐标系配置
                 bar: {
                     horizontal: false,
                     columnWidth: ['30%'],
@@ -77,15 +77,15 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
             legend: {
                 show: false
             },
-            dataLabels: {
+            dataLabels: { // 数据标签
                 enabled: false
             },
-            stroke: {
+            stroke: { // 线条样式
                 show: true,
                 width: 2,
                 colors: ['transparent']
             },
-            xaxis: {
+            xaxis: {  // x轴样式
                 categories: x,
                 axisBorder: {
                     show: false,
@@ -100,7 +100,7 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
                     }
                 }
             },
-            yaxis: {
+            yaxis: {  // y轴样式
                 labels: {
                     style: {
                         colors: labelColor,
@@ -108,10 +108,10 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
                     }
                 }
             },
-            fill: {
+            fill: { // 填充样式
                 opacity: 1
             },
-            states: {
+            states: { // 不同状态不同样式
                 normal: {
                     filter: {
                         type: 'none',
@@ -132,7 +132,7 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
                     }
                 }
             },
-            tooltip: {
+            tooltip: { // 工具提示栏
                 style: {
                     fontSize: '12px'
                 },
@@ -142,8 +142,8 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
                     }
                 }
             },
-            colors: [baseColor, secondaryColor],
-            grid: {
+            colors: [baseColor, secondaryColor], // 颜色列表
+            grid: { // 表格
                 borderColor: borderColor,
                 strokeDashArray: 4,
                 yaxis: {
@@ -154,16 +154,16 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
             }
         };
 
-        let chart = new ApexCharts(element, options);
-        chart.render();
+        let chart = new ApexCharts(element, options); // 创建Chart
+        chart.render(); // 渲染Chart
 
     }
 
-    const getData1 = () => {
+    const getData1 = () => { // 获取数据
         if (blockUI1 && !blockUI1.isBlocked()) {
             blockUI1.block();
         }
-        util.ajax.get("http://localhost:8888/price", {
+        util.ajax.get("http://localhost:8888/price", { // 请求后台数据
             type: "price",
         }, (result) => {
             if (result.success) {
@@ -172,7 +172,7 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
                 }
                 const x = []
                 const y = []
-                if (result.data instanceof Array) {
+                if (result.data instanceof Array) { // 组合数据
                     result.data.forEach(item => {
                         x.push(item.name);
                         y.push(item.num);
@@ -183,10 +183,10 @@ define(["text!./price.html", "util", "css!./price.css"], function(html, util) {
         });
     }
 
-    const init = ($parent) => {
+    const init = ($parent) => { // 初始化页面
         $parent.append(html);
         blockUI = new KTBlockUI($("#itable")[0]);
-        dt = $("#itable").DataTable();;
+        dt = $("#itable").DataTable(); // 创建Datatable;
         getData();
         blockUI1 = new KTBlockUI($("#kt_apexcharts_1")[0]);
         getData1();

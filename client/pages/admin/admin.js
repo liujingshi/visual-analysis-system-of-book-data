@@ -15,7 +15,7 @@ define([
     message
 ) {
 
-    const dataRouter = [
+    const dataRouter = [ // 路由配置
         {
             url: "get",
             view: get,
@@ -33,7 +33,7 @@ define([
         },
     ];
 
-    const sysRouter = [
+    const sysRouter = [ // 路由配置
         {
             url: "user",
             view: user,
@@ -60,9 +60,9 @@ define([
         $("#app").append(html);
         KTMenu.createInstances();
 
-        $("#data-menu").empty();
-        $("#sys-menu").empty();
-        dataRouter.forEach(r => {
+        $("#data-menu").empty(); // 清空Menu
+        $("#sys-menu").empty(); // 清空Menu
+        dataRouter.forEach(r => { // 渲染Menu
             const $item = $(`
             <div class="menu-item">
                 <a href="javascript:;" class="menu-link py-3">
@@ -79,7 +79,7 @@ define([
                 r.view.init($(".admin-body"));
             });
         });
-        sysRouter.forEach(r => {
+        sysRouter.forEach(r => { // 渲染Menu
             const $item = $(`
             <div class="menu-item">
                 <a href="javascript:;" class="menu-link py-3">

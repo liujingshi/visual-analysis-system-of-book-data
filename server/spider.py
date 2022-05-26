@@ -8,7 +8,7 @@ proxy=True
 def proxies():
     return Proxy().get()
 
-def search(keyword):
+def search(keyword): # 爬虫搜索
     url = "http://search.dangdang.com/"
     method = "GET"
     param = {
@@ -16,7 +16,7 @@ def search(keyword):
         "key": keyword,
     }
     req = Request(url, method, param, encoding="GB2312")
-    res = req.start()
+    res = req.start() # 开启请求
     result = []
     if res:
         html = HTMLSelector(res, encoding="GB2312")
@@ -27,7 +27,7 @@ def search(keyword):
                 result.append(res["id"].replace("p", ""))
     return result
 
-def bookdesc(id):
+def bookdesc(id): # 爬虫获取图书详情
     url = "http://product.dangdang.com/index.php"
     method = "GET"
     param = {
@@ -39,16 +39,16 @@ def bookdesc(id):
         "categoryPath": "01.41.26.03.00.00",
     }
     req = Request(url, method, param, encoding="GB2312")
-    res = req.start()
+    res = req.start() # 开启请求
     return res
 
-def bookinfo(id, rst):
+def bookinfo(id, rst): # 爬虫获取图书信息
     try:
         result = deepcopy(rst)
         url = "http://product.dangdang.com/{0}.html".format(id)
         method = "GET"
         req = Request(url, method, encoding="GB2312")
-        res = req.start()
+        res = req.start() # 开启请求
         descres = bookdesc(id)
         succ = True
         if res:
@@ -128,14 +128,14 @@ def bookinfo(id, rst):
         pass
     return None
 
-def booklist():
+def booklist(): # 爬虫排行榜
     results = []
     for i in range(1, 26):
         sleep(20)
         url = "http://bang.dangdang.com/books/fivestars/01.00.00.00.00.00-recent30-0-0-1-{0}".format(i)
         method = "GET"
         req = Request(url, method, encoding="GB2312")
-        res = req.start()
+        res = req.start() # 开启请求
         print(i)
         if res:
             html = HTMLSelector(res, encoding="GB2312")

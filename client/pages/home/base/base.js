@@ -1,12 +1,12 @@
 define(["text!./base.html", "util", "css!./base.css"], function (html, util) {
 
-    let blockUI = null;
-    let dt = null;
+    let blockUI = null;  // Loading对象
+    let dt = null;  // grid对象
 
-    const render = (results) => {
-        dt.destroy();
-        $("#ibody").empty();
-        results.forEach(result => {
+    const render = (results) => {  // 渲染方法
+        dt.destroy();  // 销毁grid
+        $("#ibody").empty(); // 清空tbody dom
+        results.forEach(result => {  // 遍历数据 渲染DOM
             const autuor = result.authors.join(",");
             $("#ibody").append(`
             <tr>
@@ -21,35 +21,35 @@ define(["text!./base.html", "util", "css!./base.css"], function (html, util) {
             </tr>
             `);
         });
-        dt = $("#itable").DataTable();
+        dt = $("#itable").DataTable(); // 创建Datatable
     }
 
-    const getData = (keyword) => {
+    const getData = (keyword) => {  // 请求后台数据
         if (blockUI && !blockUI.isBlocked()) {
-            blockUI.block();
+            blockUI.block();  // 开启Loading
         }
-        util.ajax.get("http://localhost:8888/base", {
+        util.ajax.get("http://localhost:8888/base", {  // 请求后台
             keyword: keyword,
         }, (result) => {
             if (result.success) {
                 if (blockUI && blockUI.isBlocked()) {
-                    blockUI.release();
+                    blockUI.release();  // 关闭Loading
                 }
-                render(result.data);
+                render(result.data);  // 开始渲染
             }
         });
     }
 
-    const init = ($parent) => {
+    const init = ($parent) => { // 初始化页面
         $parent.append(html);
         blockUI = new KTBlockUI($("#itable")[0]);
-        dt = $("#itable").DataTable();;
+        dt = $("#itable").DataTable(); // 创建Datatable;
         $('#ikeyword').on('keypress', function (e) {
             if (e.keyCode === 13) {
                 getData($('#ikeyword').val());
             }
         });
-        getData("");
+        getData(""); // 刷新表格
     }
 
     return {

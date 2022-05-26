@@ -1,7 +1,7 @@
 define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
 
-    let blockUI = null;
-    let blockUI1 = null;
+    let blockUI = null;  // Loading对象
+    let blockUI1 = null;  // Loading对象
     let dt1 = null;
     let blockUI2 = null;
     let dt2 = null;
@@ -11,7 +11,7 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
     const render1 = (results) => {
         dt1.destroy();
         $("#ibody1").empty();
-        results.forEach(result => {
+        results.forEach(result => {  // 遍历数据 渲染DOM
             $("#ibody1").append(`
             <tr>
                 <td>${result.name}</td>
@@ -25,7 +25,7 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
     const render2 = (results) => {
         dt2.destroy();
         $("#ibody2").empty();
-        results.forEach(result => {
+        results.forEach(result => {  // 遍历数据 渲染DOM
             $("#ibody2").append(`
             <tr>
                 <td>${result.name}</td>
@@ -39,7 +39,7 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
     const render3 = (results) => {
         dt3.destroy();
         $("#ibody3").empty();
-        results.forEach(result => {
+        results.forEach(result => {  // 遍历数据 渲染DOM
             $("#ibody3").append(`
             <tr>
                 <td>${result.name}</td>
@@ -50,11 +50,11 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
         dt3 = $("#itable3").DataTable();
     }
 
-    const getData1 = () => {
+    const getData1 = () => { // 获取数据
         if (blockUI1 && !blockUI1.isBlocked()) {
             blockUI1.block();
         }
-        util.ajax.get("http://localhost:8888/press", {
+        util.ajax.get("http://localhost:8888/press", { // 请求后台
             type: "info",
         }, (result) => {
             if (result.success) {
@@ -66,11 +66,11 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
         });
     }
 
-    const getData2 = () => {
+    const getData2 = () => { // 获取数据
         if (blockUI2 && !blockUI2.isBlocked()) {
             blockUI2.block();
         }
-        util.ajax.get("http://localhost:8888/press", {
+        util.ajax.get("http://localhost:8888/press", { // 请求后台
             type: "price",
         }, (result) => {
             if (result.success) {
@@ -82,11 +82,11 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
         });
     }
 
-    const getData3 = () => {
+    const getData3 = () => { // 获取数据
         if (blockUI3 && !blockUI3.isBlocked()) {
             blockUI3.block();
         }
-        util.ajax.get("http://localhost:8888/press", {
+        util.ajax.get("http://localhost:8888/press", { // 请求后台
             type: "score",
         }, (result) => {
             if (result.success) {
@@ -99,22 +99,22 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
     }
 
     const render = (x, y) => {
-        var ctx = document.getElementById('kt_chartjs_3');
+        var ctx = document.getElementById('kt_chartjs_3'); // 获取目标元素
 
-        // Define colors
-        var primaryColor = KTUtil.getCssVariableValue('--bs-primary');
-        var dangerColor = KTUtil.getCssVariableValue('--bs-danger');
-        var successColor = KTUtil.getCssVariableValue('--bs-success');
-        var warningColor = KTUtil.getCssVariableValue('--bs-warning');
-        var infoColor = KTUtil.getCssVariableValue('--bs-info');
+        // 定义颜色
+        var primaryColor = KTUtil.getCssVariableValue('--bs-primary'); // 获取颜色
+        var dangerColor = KTUtil.getCssVariableValue('--bs-danger'); // 获取颜色
+        var successColor = KTUtil.getCssVariableValue('--bs-success'); // 获取颜色
+        var warningColor = KTUtil.getCssVariableValue('--bs-warning'); // 获取颜色
+        var infoColor = KTUtil.getCssVariableValue('--bs-info'); // 获取颜色
 
-        // Define fonts
-        var fontFamily = KTUtil.getCssVariableValue('--bs-font-sans-serif');
+        // 定义字体
+        var fontFamily = KTUtil.getCssVariableValue('--bs-font-sans-serif'); // 获取字体
 
-        // Chart labels
+        // Chart 标签
         const labels = x;
 
-        // Chart data
+        // Chart 数据
         const data = {
             labels: labels,
             datasets: [{
@@ -131,7 +131,7 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
             }]
         };
 
-        // Chart config
+        // Chart 配置
         const config = {
             type: 'pie',
             data: data,
@@ -150,24 +150,24 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
             }
         };
 
-        // Init ChartJS -- for more info, please visit: https://www.chartjs.org/docs/latest/
+        // 初始化Chart
         var myChart = new Chart(ctx, config);
     }
 
-    const getData = () => {
+    const getData = () => { // 获取数据
         if (blockUI && !blockUI.isBlocked()) {
-            blockUI.block();
+            blockUI.block();  // 开启Loading
         }
         util.ajax.get("http://localhost:8888/press", {
             type: "big_price",
         }, (result) => {
             if (result.success) {
                 if (blockUI && blockUI.isBlocked()) {
-                    blockUI.release();
+                    blockUI.release();  // 关闭Loading
                 }
                 const x = []
                 const y = []
-                if (result.data instanceof Array) {
+                if (result.data instanceof Array) { // 组合数据
                     result.data.forEach(item => {
                         x.push(item.name);
                         y.push(item.num);
@@ -179,7 +179,7 @@ define(["text!./press.html", "util", "css!./press.css"], function (html, util) {
         });
     }
 
-    const init = ($parent) => {
+    const init = ($parent) => { // 初始化页面
         $parent.append(html);
         blockUI = new KTBlockUI($("#kt_chartjs_3")[0]);
         blockUI1 = new KTBlockUI($("#itable1")[0]);

@@ -15,7 +15,7 @@ define([
     msg
 ) {
 
-    const router = [
+    const router = [ // 路由配置
         {
             url: "base",
             view: base,
@@ -47,7 +47,7 @@ define([
         $("#app").append(html);
 
         $("#menu_items").empty();
-        router.forEach(r => {
+        router.forEach(r => { // 渲染Menu
             const $item = $(`
             <div data-item="${r.url}" class="menu-item menu-lg-down-accordion me-lg-1">
                 <span class="menu-link py-3">
@@ -62,7 +62,7 @@ define([
             });
         })
         
-        const url = window.location.hash.replace(/\#/g, "");
+        const url = window.location.hash.replace(/\#/g, ""); // 获取Hash路由
 
         if (url !== "") {
             const arr = url.split("/");
