@@ -6,4 +6,5 @@ pip install requests
 pip install beautifulsoup4
 pip install tornado
 pip install pymongo
+pip install jieba
 ```

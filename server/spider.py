@@ -2,11 +2,22 @@ from tools import Request, HTMLSelector, JsonAction, Proxy, FileAction
 from copy import deepcopy
 from time import sleep
 import re
+import jieba
 from database import Database, getSheetInsert
 
 proxy=True
 def proxies():
     return Proxy().get()
+
+def splitWord(text): # jieba 全模式
+    # 预处理
+    text = text.replace("\n", "")
+    text = text.replace("\r", "")
+    text = text.replace(" ", "")
+    # 分词
+    result = jieba.cut(text, cut_all=True)
+    # 返回结果
+    return result
 
 def search(keyword): # 爬虫搜索
     url = "http://search.dangdang.com/"
@@ -120,6 +131,8 @@ def bookinfo(id, rst): # 爬虫获取图书信息
                     descHTML = htmldesc.get("#content .descrip")
                     if descHTML:
                         result["desc"] = descHTML.text.replace("\n", "").replace("\r", "").replace(" ", "") # 简介
+                        # 分词获取标签
+                        result["tags"] = splitWord(result["desc"])
             except:
                 succ = False
         if succ:
