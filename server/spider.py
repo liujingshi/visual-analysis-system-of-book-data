@@ -9,7 +9,7 @@ proxy=True
 def proxies():
     return Proxy().get()
 
-def splitWord(text): # jieba 全模式
+def splitWord(text): # jieba 全模式分词
     # 预处理
     text = text.replace("\n", "")
     text = text.replace("\r", "")
